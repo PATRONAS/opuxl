@@ -1,4 +1,4 @@
-# opuxl
+# opuxl - WIP / Early Stage
 Excel Addin to connect your favorite programming language with your Excel sheets
 
 The Opuxl Excel Addin allows you to connect your application with Excel. You define your functions in your favorite programming language (Java, Node, ...) and the Opuxl Addin can call those functions from within your Excel Sheet.
