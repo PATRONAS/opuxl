@@ -35,7 +35,7 @@ Now the Socket Server is running and we have to start an Excel with an installed
 5. Execute your functions defined in your java demo server
 ...they are prefixed with "Opus." in this demo build, eg: =Opus.GetNames()
 
-## Want to help? Or found a Bug? Or a specific feature is missing? Or just a question?
+### Want to help? Or found a Bug? Or a specific feature is missing? Or just a question?
 Excellent! You can help us by just creating an Issue or submiting a Pull Request. Your help would be appreciated.
 
 ## Example
