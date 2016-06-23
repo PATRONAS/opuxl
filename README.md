@@ -14,7 +14,9 @@ Check out the Java Demo which creates a Server Socket and published methods whic
 (Watch out: Currently all responses from the server socket should be a matrix, eg: Object[][], which is directly printed into the Excel sheet) 
 
 ## How to connect the development java server with your Excel sheet
+
 **Java Part with Eclipse**
+
 1. Import "demos/java" as a Maven Project
 2. Project -> Maven -> Update Project
 3. Run the DemoServer
@@ -23,6 +25,7 @@ Check out the Java Demo which creates a Server Socket and published methods whic
 Now the Socket Server is running and we have to start an Excel with an installed addin.
 
 **Debug mode with Visual Studio Community 2015**
+
 1. Import "opuxl_addin/Opuxl" as a Solution
 2. Install NuGet Packages on both Projects
 3. OpuxlClassLibrary Project -> Properties -> Debug
