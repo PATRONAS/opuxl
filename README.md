@@ -5,9 +5,9 @@ The Opuxl Excel Addin allows you to connect your application with Excel. You def
 
 We had trouble to fill in multiple cells via a single function by using [XLLoop](http://xlloop.sourceforge.net/), so we created our own addin which uses [ExcelDNA](https://exceldna.codeplex.com/) to manipulate the Excel sheet.
 
-# Example
-![Example](/opuxl-demo.gif?raw=true "")
 
-
-# Want to help? Or found a Bug? Or a specific feature is missing?
+## Want to help? Or found a Bug? Or a specific feature is missing?
 Excellent! You can help us by just creating an Issue or submiting a Pull Request. Your help would be appreciated.
+
+## Example
+![Example](/opuxl-demo.gif?raw=true "")
