@@ -1,0 +1,24 @@
+
+.metadata
+bin/
+tmp/
+target/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+
+.classpath
+.project
+.settings
+
+.svn/
+
+*.class
+
+# Eclipse Core
+.project
