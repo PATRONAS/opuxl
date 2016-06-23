@@ -1,0 +1,3 @@
+﻿<DnaLibrary Name="Opus Excel Add In" RuntimeVersion="v4.0">
+  <ExternalLibrary Path="OpuxlClassLibrary.dll" Pack="true" />
+</DnaLibrary>
