@@ -13,7 +13,7 @@ Check out the Java Demo which creates a Server Socket and published methods whic
 
 (Watch out: Currently all responses from the server socket should be a matrix, eg: Object[][], which is directly printed into the Excel sheet) 
 
-## How to connect the development java server with your Excel sheet
+## How to connect the demo Java server with your Excel sheet
 
 **Java Part with Eclipse**
 
