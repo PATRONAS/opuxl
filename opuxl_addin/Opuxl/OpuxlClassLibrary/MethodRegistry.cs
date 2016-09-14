@@ -167,25 +167,26 @@ namespace OpuxlClassLibrary
         /// <param name="response"></param>
         private void writeMatrixToExcelSheet(ResponsePayload response)
         {
-            Excel.Application app = (Excel.Application)ExcelDnaUtil.Application;
-            Excel.Range range = app.ActiveCell;
+            object[,] data2d = Create2DArray(response.matrix.headers, response.matrix.data);
 
-            var rows = response.data.Count;
-            int cols = 0;
-            if (response.data.Count > 0)
-            {
-                cols = response.data.ElementAt(0).Count;
-            }
-
-            object[,] data2d = Create2DArray(response.data);
-
-            // TODO rearrange the matrix (move up by 1 and to the left by 1. selected cell is value [0][0])
-            var reference = new ExcelReference(range.Row, range.Row + rows - 1, range.Column - 1, range.Column - 2 + cols);
             ExcelAsyncUtil.QueueAsMacro(() =>
             {
-                // TODO the setValue method should NOT override the format of the excel cells.
-                reference.SetValue(data2d);
+                // Have to do the update within an async tasks, as UDFs are not allowed to manipulate other cells.
+                WriteArray(data2d);
             });
+        }
+
+        private void WriteArray(object[,] data)
+        {
+            Excel.Application app = (Excel.Application)ExcelDnaUtil.Application;
+            Excel.Worksheet worksheet = (Excel.Worksheet)app.ActiveWorkbook.ActiveSheet;
+
+            Excel.Range startCell = app.ActiveCell;
+            Excel.Range endCell = (Excel.Range)worksheet.Cells[startCell.Row + data.GetLength(0) - 1, startCell.Column + data.GetLength(1) - 1];
+
+            var writeRange = worksheet.Range[startCell, endCell];
+
+            writeRange.Value2 = data;
         }
 
         private void registerDelegate(Delegate del, object att, List<ExcelArgumentAttribute> argAtt)
