@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright 2016 PATRONAS Financial Systems GmbH. All rights reserved.
  ******************************************************************************/
-package de.patronas.opus.opuxl;
+package de.patronas.opus.opuxl.server;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  * specific function should be called.
  * @author stepan
  */
-class FunctionPayload {
+public class FunctionPayload {
 
   private String name;
   private List<Object> args = new ArrayList<>();

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using ClientConnector.communication;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,19 +9,19 @@ namespace ClientConnector
     /// </summary>
     public class ResponsePayload
     {
-        public string type { get; set; }
-        public List<List<object>> data { get; set; }
+        public string name { get; set; }
+        public OpuxlMatrix matrix { get; set; }
         public string error { get; set; }
 
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append("{ type: ").Append(type).Append(" , data: ");
+            builder.Append("{ name: ").Append(name).Append(" , matrix: ");
 
             builder.Append("[");
-            if (data.Capacity != 0)
+            if (matrix.data != null && matrix.data.Capacity != 0)
             {
-                data.ForEach(row =>
+                matrix.data.ForEach(row =>
                 {
                     row.ForEach(col =>
                     {

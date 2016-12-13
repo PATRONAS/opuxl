@@ -3,8 +3,8 @@
  ******************************************************************************/
 package de.patronas.opus.opuxl.demo;
 
-import de.patronas.opus.opuxl.FunctionHandler;
-import de.patronas.opus.opuxl.OpuxlServer;
+import de.patronas.opus.opuxl.server.FunctionHandler;
+import de.patronas.opus.opuxl.server.OpuxlServer;
 
 /**
  * @author stepan

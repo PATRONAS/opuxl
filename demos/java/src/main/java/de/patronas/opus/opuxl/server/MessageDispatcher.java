@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright 2016 PATRONAS Financial Systems GmbH. All rights reserved.
  ******************************************************************************/
-package de.patronas.opus.opuxl;
+package de.patronas.opus.opuxl.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -103,7 +105,7 @@ class MessageDispatcher extends Thread {
         result = executeFunction(functionPayload);
       } else {
         // If no method can be found, create an error response.
-        result = createResult(functionPayload.getName(), new Object[][] {}, "Can't dispatch message. Function is not registered.");
+        result = createResult(functionPayload.getName(), new OpuxlMatrix(), "Can't dispatch message. Function is not registered.");
       }
     } catch (final IOException e) {
       LOG.error("Error while dispatching message.");
@@ -122,7 +124,7 @@ class MessageDispatcher extends Thread {
    *          the error, if present
    * @return the result as a json string
    */
-  private String createResult(final String type, final Object[][] data, final String error) {
+  private String createResult(final String type, final OpuxlMatrix data, final String error) {
     String result = "{}";
     final ResponsePayload payload = new ResponsePayload(type, error, data);
 
@@ -143,12 +145,16 @@ class MessageDispatcher extends Thread {
    * @return result as json string
    */
   private String executeFunction(final FunctionPayload functionPayload) {
-    Object[][] executed = new Object[][] {};
+    OpuxlMatrix executed = new OpuxlMatrix();
     String error = "";
     try {
       executed = functionHandler.execute(functionPayload);
     } catch (final Exception ex) {
-      error = ex.getMessage();
+      error = ex.getCause() != null ? ex.getCause().getMessage() : ex
+          .getMessage();
+      if (error == null) {
+        error = "Error while executing Function: " + functionPayload.getName();
+      }
     }
     return createResult(functionPayload.getName(), executed, error);
   }
@@ -161,20 +167,22 @@ class MessageDispatcher extends Thread {
   private String createFunctionDescriptionResponse() {
     final Map<String, InstanceMethod> methodsMap = functionHandler.getMethods();
 
-    final Object[][] data = new Object[methodsMap.keySet().size()][2];
+    // TODO this should not be done via an OpuxlMatrix but with an
+    // InitializeObject.
 
-    int i = 0;
+    final OpuxlMatrix matrix = new OpuxlMatrix();
+
     for (final Entry<String, InstanceMethod> entry : methodsMap.entrySet()) {
-      // map List of ExcelArgumentAttributes to Array of String Arrays
+      // TODO map List of ExcelArgumentAttributes to Array of String Arrays
       // containing Name+Description.
-
-      data[i] = new Object[] {
-          entry.getKey(), entry.getValue().toJsonArrayString().toArray()
-      };
-      i++;
+      final List<Object> row = new ArrayList<>();
+      row.add(entry.getKey());
+      row.add(entry.getValue().getDescription());
+      row.add(entry.getValue().toJsonArrayString().toArray());
+      matrix.getData().add(row);
     }
 
-    return createResult(INITIALIZE, data, "");
+    return createResult(INITIALIZE, matrix, "");
   }
 
   private void sendMessage(final String message, final PrintWriter writer) {

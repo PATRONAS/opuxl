@@ -14,7 +14,7 @@ namespace ClientConnector
             var server = new SocketConnector();
             ResponsePayload response = server.executeFn(new FunctionPayload(SocketConnector.INITIALIZE));
 
-            if (response.type.Equals(SocketConnector.INITIALIZE))
+            if (response.name.Equals(SocketConnector.INITIALIZE))
             {
                 System.Diagnostics.Debug.WriteLine("Register the following methods: " + response.ToString());
             }
