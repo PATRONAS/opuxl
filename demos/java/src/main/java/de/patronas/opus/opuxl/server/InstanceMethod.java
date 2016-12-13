@@ -1,9 +1,8 @@
 /*******************************************************************************
  * Copyright 2016 PATRONAS Financial Systems GmbH. All rights reserved.
  ******************************************************************************/
-package de.patronas.opus.opuxl;
+package de.patronas.opus.opuxl.server;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,7 +18,7 @@ import com.google.common.collect.Collections2;
  * Wrapper class for a specific method of an object instance.
  * @author stepan
  */
-class InstanceMethod {
+public class InstanceMethod {
 
   private static final Logger LOG = LoggerFactory
       .getLogger(InstanceMethod.class);
@@ -32,6 +31,11 @@ class InstanceMethod {
    * The method which is invoked.
    */
   private final Method method;
+
+  /*
+   * The method description.
+   */
+  private final String description;
   /*
    * The description of each parameter.
    */
@@ -44,9 +48,12 @@ class InstanceMethod {
    * @param method
    *          the method
    */
-  public InstanceMethod(final Object instance, final Method method) {
+  public InstanceMethod(final Object instance,
+      final Method method,
+      final String description) {
     this.instance = instance;
     this.method = method;
+    this.description = description;
   }
 
   /**
@@ -62,16 +69,18 @@ class InstanceMethod {
    */
   public InstanceMethod(final Object instance,
       final Method method,
+      final String description,
       final List<ExcelArgumentAttribute> parameterArguments) {
-    this(instance, method);
+    this(instance, method, description);
     setParameterArguments(parameterArguments);
   }
 
   /**
-   * TODO Rethink the approach of sending everything back as a Object-2d-Array.
    * @return The Argument Attributes as a collection of String arrays with a
    *         name and a description each.
-   * @deprecated
+   * @deprecated("Rethink the approach of sending everything back as a
+   *                      Object-2d-Array. Rather use a serializable wrapper
+   *                      class which is also present in the C# Code.")
    */
   @Deprecated
   public Collection<String[]> toJsonArrayString() {
@@ -80,7 +89,10 @@ class InstanceMethod {
           @Override
           public String[] apply(final ExcelArgumentAttribute arg) {
             return new String[] {
-                arg.getName(), arg.getDescription()
+                arg.getName(),
+                arg.getDescription() + (arg.isOptional() ? " (Optional)" : ""),
+                arg.getType().toString(),
+                Boolean.toString(arg.isOptional())
             };
           }
         });
@@ -92,41 +104,18 @@ class InstanceMethod {
    *          the arguments
    * @return the result of the function
    */
-  public Object[][] execute(final List<Object> args) {
-    final Object executed = internalExecute(args);
-    return convert(executed);
+  public OpuxlMatrix execute(final List<Object> args) {
+    final OpuxlMatrix executed = internalExecute(args);
+    return executed;
   }
 
-  private Object[][] convert(final Object executed) {
-    final Object[][] result;
-
-    // Opuxl always expects an object matrix as its result to be able to easily
-    // insert it into the Excel sheet.
-    if (executed instanceof Object[][]) {
-      result = (Object[][]) executed;
-    } else if (executed instanceof Object[]) {
-      result = new Object[][] {
-        (Object[]) executed
-      };
-    } else {
-      result = new Object[][] {
-        new Object[] {
-          executed
-        }
-      };
-    }
-
-    return result;
-  }
-
-  private Object internalExecute(final List<Object> args) {
+  private OpuxlMatrix internalExecute(final List<Object> args) {
     try {
-      return method.invoke(instance, args.toArray());
-    } catch (IllegalAccessException | IllegalArgumentException
-        | InvocationTargetException ex) {
+      return (OpuxlMatrix) method.invoke(instance, args.toArray());
+    } catch (final Exception ex) {
       LOG.error("Error while executing method: " + method.getName() + " / "
-          + ex.getMessage());
-      throw new RuntimeException(ex);
+          + ex.getCause().getMessage());
+      throw new RuntimeException(ex.getCause());
     }
   }
 
@@ -143,6 +132,13 @@ class InstanceMethod {
    */
   public void setParameterArguments(final List<ExcelArgumentAttribute> parameterArguments) {
     this.parameterArguments = parameterArguments;
+  }
+
+  /**
+   * @return the description
+   */
+  public String getDescription() {
+    return description;
   }
 
 }

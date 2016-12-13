@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright 2016 PATRONAS Financial Systems GmbH. All rights reserved.
  ******************************************************************************/
-package de.patronas.opus.opuxl;
+package de.patronas.opus.opuxl.server;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -29,4 +29,9 @@ public @interface OpuxlArg {
    * The Excel Type of the Argument.
    */
   ExcelType type();
+
+  /**
+   * Whether the Argument is optional.
+   */
+  boolean optional() default false;
 }

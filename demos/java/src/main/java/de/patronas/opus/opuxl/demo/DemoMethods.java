@@ -3,9 +3,15 @@
  ******************************************************************************/
 package de.patronas.opus.opuxl.demo;
 
-import de.patronas.opus.opuxl.ExcelType;
-import de.patronas.opus.opuxl.OpuxlArg;
-import de.patronas.opus.opuxl.OpuxlMethod;
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
+import de.patronas.opus.opuxl.server.ExcelType;
+import de.patronas.opus.opuxl.server.MatrixHeader;
+import de.patronas.opus.opuxl.server.OpuxlArg;
+import de.patronas.opus.opuxl.server.OpuxlMatrix;
+import de.patronas.opus.opuxl.server.OpuxlMethod;
 
 /**
  * Example Methods to register with the Opuxl Demo Server
@@ -16,36 +22,43 @@ public class DemoMethods {
   /**
    * @return a list of Names
    */
-  @OpuxlMethod
-  public String[] getNames() {
-    return new String[] {
+  @OpuxlMethod(name = "GetNames", description = "Get some test names")
+  public OpuxlMatrix getNames() {
+    final OpuxlMatrix result = new OpuxlMatrix();
+    final String[] names = new String[] {
         "Jon Snow", "Arya Stark", "Daenerys Targaryen", "Ramsay Bolton"
     };
+
+    result.getData().add(Lists.newArrayList(names));
+    return result;
   }
 
   /**
    * Create a matrix from 0 to {@linkplain end} with 10 entries per line.
    */
-  @OpuxlMethod
-  public Object[][] getNumberSeries(@OpuxlArg(name = "End", description = "The Number last number of the Series.", type = ExcelType.NUMBER) final Double end) {
-    final int target = Math.abs(end.intValue());
-    final Object[][] result = new Object[1 + target / 10][10];
+  @OpuxlMethod(name = "GetSeries", description = "Gets a number series for the given start and end parameter")
+  public OpuxlMatrix getNumberSeries(@OpuxlArg(name = "End", description = "The Number last number of the Series.", type = ExcelType.NUMBER) final Double end) {
+    final OpuxlMatrix result = new OpuxlMatrix();
 
-    int start = 0;
-    while (start < end) {
-      result[start / 10][start % 10] = start++;
+    final int target = Math.abs(end.intValue());
+
+    for (int i = 0; i < target; i++) {
+      final List<Object> row = Lists.newArrayList();
+      for (int j = 0; j < 10; j++) {
+        row.add(10 * i + j + 1);
+      }
+      result.getData().add(row);
     }
 
     return result;
   }
 
-  @OpuxlMethod
-  public Object[][] pow(@OpuxlArg(name = "base", description = "The Base", type = ExcelType.NUMBER) final Double a, @OpuxlArg(name = "exponent", description = "The Exponent", type = ExcelType.NUMBER) final Double b) {
-    return new Object[][] {
-      {
-        Math.pow(a, b)
-      }
-    };
+  @OpuxlMethod(name = "Pow", description = "Pows the given number")
+  public OpuxlMatrix pow(@OpuxlArg(name = "base", description = "The Base", type = ExcelType.NUMBER) final Double a, @OpuxlArg(name = "exponent", description = "The Exponent", type = ExcelType.NUMBER) final Double b) {
+    final OpuxlMatrix result = new OpuxlMatrix();
+    result.setHeaders(Lists
+        .newArrayList(new MatrixHeader(a + "^" + b, ExcelType.NUMBER)));
+    result.getData().add(Lists.newArrayList(Math.pow(a, b)));
+    return result;
   }
-
 }

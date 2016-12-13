@@ -1,32 +1,52 @@
 /*******************************************************************************
  * Copyright 2016 PATRONAS Financial Systems GmbH. All rights reserved.
  ******************************************************************************/
-package de.patronas.opus.opuxl;
+package de.patronas.opus.opuxl.server;
 
 /**
  * The Response Payload encapsulates a function call result which will be send
  * to the Opuxl Addin.
  * @author stepan
  */
-class ResponsePayload {
+public class ResponsePayload {
 
   private String name;
   private String error;
-  private Object[][] data;
+  private OpuxlMatrix matrix;
 
+  /**
+   * Constructor.
+   */
   public ResponsePayload() {
+    // For Serialization
   }
 
+  /**
+   * Constructor.
+   * @param name
+   *          the name
+   * @param error
+   *          the error
+   */
   public ResponsePayload(final String name, final String error) {
     this.name = name;
     this.error = error;
   }
 
+  /**
+   * Constructor.
+   * @param name
+   *          the name
+   * @param error
+   *          the error
+   * @param matrix
+   *          the result data
+   */
   public ResponsePayload(final String name,
       final String error,
-      final Object[][] data) {
+      final OpuxlMatrix matrix) {
     this(name, error);
-    this.data = data;
+    this.matrix = matrix;
   }
 
   /**
@@ -62,16 +82,16 @@ class ResponsePayload {
   /**
    * @return the data
    */
-  public Object[][] getData() {
-    return data;
+  public OpuxlMatrix getMatrix() {
+    return matrix;
   }
 
   /**
-   * @param data
+   * @param matrix
    *          the data to set
    */
-  public void setData(final Object[][] data) {
-    this.data = data;
+  public void setMatrix(final OpuxlMatrix matrix) {
+    this.matrix = matrix;
   }
 
 }

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright 2016 PATRONAS Financial Systems GmbH. All rights reserved.
  ******************************************************************************/
-package de.patronas.opus.opuxl;
+package de.patronas.opus.opuxl.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,23 +13,43 @@ public class ExcelArgumentAttribute {
   private String name;
   private String description;
   private ExcelType type;
+  private boolean optional;
 
+  /**
+   * Constructor.
+   */
   public ExcelArgumentAttribute() {
-  }
-
-  public ExcelArgumentAttribute(final String name,
-      final String description,
-      final ExcelType type) {
-    this.name = name;
-    this.description = description;
-    this.type = type;
+    // For Serialization
   }
 
   /**
+   * Constructor.
+   * @param name
+   *          the name
+   * @param description
+   *          the description
+   * @param type
+   *          the type
+   * @param optional
+   *          whether the arg is optional
+   */
+  public ExcelArgumentAttribute(final String name,
+      final String description,
+      final ExcelType type,
+      final boolean optional) {
+    this.name = name;
+    this.description = description;
+    this.type = type;
+    setOptional(optional);
+  }
+
+  /**
+   * Constructor.
    * @param arg
+   *          the opuxlArg
    */
   public ExcelArgumentAttribute(final OpuxlArg arg) {
-    this(arg.name(), arg.description(), arg.type());
+    this(arg.name(), arg.description(), arg.type(), arg.optional());
   }
 
   /**
@@ -78,6 +98,22 @@ public class ExcelArgumentAttribute {
    */
   public void setType(final ExcelType type) {
     this.type = type;
+  }
+
+  /**
+   * @return the optional
+   */
+  @JsonProperty("Optional")
+  public boolean isOptional() {
+    return optional;
+  }
+
+  /**
+   * @param optional
+   *          the optional to set
+   */
+  public void setOptional(final boolean optional) {
+    this.optional = optional;
   }
 
 }

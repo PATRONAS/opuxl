@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright 2016 PATRONAS Financial Systems GmbH. All rights reserved.
  ******************************************************************************/
-package de.patronas.opus.opuxl;
+package de.patronas.opus.opuxl.server;
 
 /**
  * @author stepan

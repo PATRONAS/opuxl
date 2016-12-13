@@ -10,8 +10,8 @@ We had trouble to fill in multiple cells via a single function by using [XLLoop]
 When you start your Excel with the plugin activated, it will try to create a socket connection to 127.0.0.1:61379 and send a "Initialize" request to fetch all available methods. The response will contain the methods and they will be registered in the Excel Sheet. A method invocation will trigger a stateless request/response connection between the Addin and the "Socket Server".
 
 **Check out the Java Demo** which creates a Server Socket and published methods which have a specific annotation.
-
-(Watch out: Currently all responses from the server socket should be a matrix, eg: Object[][], which is directly printed into the Excel sheet) 
+The result of a Opuxl Function should always be a OpuxlMatrix.
+In the OpuxlMatrix you can specify matrix headers and the matrix data (list of lists => list of rows). 
 
 ## How to connect the demo Java server with your Excel sheet
 
