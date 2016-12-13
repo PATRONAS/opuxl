@@ -1,3 +1,9 @@
 ﻿<DnaLibrary Name="Opus Excel Add In" RuntimeVersion="v4.0">
   <ExternalLibrary Path="OpuxlClassLibrary.dll" Pack="true" />
+  <Reference Path="Newtonsoft.Json.dll" Pack="true" />
+  <Reference Path="ClientConnector.dll" Pack="true" />
+
+  <Reference Path="ExcelDna.IntelliSense.dll" Pack="true" />
+  <Reference Path="UIAComWrapper.dll" Pack="true" />
+  <Reference Path="Interop.UIAutomationClient.dll" Pack="true" />
 </DnaLibrary>

@@ -7,6 +7,9 @@ using System.Net.Sockets;
 
 namespace ClientConnector
 {
+    // Currency and Logical are not yet supported
+    public enum ExcelType { TEXT, NUMBER, DATETIME, LOGICAL }
+
     public class SocketConnector
     {
         /// <summary>
