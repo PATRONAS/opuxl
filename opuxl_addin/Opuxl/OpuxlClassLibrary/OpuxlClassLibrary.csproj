@@ -77,7 +77,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="RowMatrix.cs" />
+    <Compile Include="ContentArea.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ExcelDnaPack\ExcelDnaPack.exe.config" />
