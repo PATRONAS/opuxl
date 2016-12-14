@@ -1,9 +1,11 @@
-# opuxl - WIP / Early Stage
+# opuxl - Self-Discovered Functions within Excel
 Excel Addin to connect your favorite programming language with your Excel sheets
 
-The Opuxl Excel Addin allows you to connect your application with Excel. You define your functions in your favorite programming language (Java, Node, ...) and the Opuxl Addin can call those functions from within your Excel Sheet.
+The Opuxl Excel Addin allows you to connect your application with Excel. You define your functions in your favorite programming language (Java, Node, ...) and the Opuxl Addin will discover and can call those functions from within your Excel Sheet.
 
 We had trouble to fill in multiple cells via a single function by using [XLLoop](http://xlloop.sourceforge.net/), so we created our own addin which uses [ExcelDNA](https://exceldna.codeplex.com/) to manipulate the Excel sheet.
+
+With the addin it is possible to connect your Excel sheets to your desktop or server applications.
 
 ## Example
 ![Example](/opuxl-demo.gif?raw=true "")
