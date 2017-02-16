@@ -20,12 +20,11 @@ namespace ClientConnector
         private IPAddress address;
         private int port;
 
-        // TODO: Make IP and PORT configurable via a config file, which will be loaded on Excel Sheet Startup.
         public SocketConnector()
         {
-            string ipAdress = "127.0.0.1";
-            address = IPAddress.Parse(ipAdress);
-            port = 61379;
+            IPHostEntry entry = Dns.GetHostEntry(ClientConfiguration.Host);
+            address = entry.AddressList[0];           
+            port = ClientConfiguration.Port;
         }
 
         /// <summary>
