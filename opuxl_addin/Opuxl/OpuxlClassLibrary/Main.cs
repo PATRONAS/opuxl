@@ -15,6 +15,8 @@ namespace OpuxlClassLibrary
     /// </summary>
     public class Main : IExcelAddIn
     {
+        static bool IsConnected { get; set; }
+
         public void AutoClose()
         {
             // on excel sheet close
@@ -23,6 +25,12 @@ namespace OpuxlClassLibrary
 
         void IExcelAddIn.AutoOpen()
         {
+            IsConnected = Connect();
+        }
+
+        private static bool Connect()
+        {
+            bool result = false;
             IntelliSenseServer.Register();
 
             // Create a client connector which will do an initial request to the Opus ServerSocket and retrieve all available methods.
@@ -62,24 +70,40 @@ namespace OpuxlClassLibrary
                     // Create a delegate in our registry for each function
                     registry.addDelegate(functionName, functionDescription, arguments);
                 });
-            } else
+                result = true;
+            }
+            else
             {
                 Debug.WriteLine("Response not set, cant register functions.");
             }
-            
+
 
             // Register all retrieves functions as delegates which are going to be available in excel.
             registry.createDelegates();
+            return result;
         }
 
         /// <summary>
         /// Basic Function to display the version of this Excel Plugin
         /// </summary>
         /// <returns>The Excel Plugin Version</returns>
-        [ExcelFunction(Name = "Opus.GetAddinVersion", Description = "Returns the Opus Excel Plugin Information")]
+        [ExcelFunction(Name = "Opus.GetInformation", Description = "Returns the Opus Excel Plugin Information")]
         public static string GetOpusInfo()
         {
-            return "Opuxl V1.0";
+            return "Opuxl V1.0, Connection Status: " + (IsConnected ? "connected" : "not connected");
+        }
+
+        [ExcelFunction(Name = "Opus.Connect", Description = "Tries to establish a connection to the Opus Client")]
+        public static string ConnectFn()
+        {
+            // We have to call connect in the macro context to be able to register delegates.
+            ExcelAsyncUtil.QueueAsMacro(() => {
+                IsConnected = Connect();
+                Microsoft.Office.Interop.Excel.Application app = (Microsoft.Office.Interop.Excel.Application)ExcelDnaUtil.Application;
+                app.ActiveCell.Value2 = IsConnected ? "Successfully connected" : "Can't connect to Opus";
+            });
+
+            return "Connecting ...";
         }
 
         public static T ParseEnum<T>(string value)
